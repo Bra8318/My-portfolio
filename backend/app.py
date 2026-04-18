@@ -8,9 +8,12 @@ from backend.schema import ContactForm
 import os
 import shutil
 import uuid
+#for render 
+from fastapi.templating import Jinja2Templates
 
 
 app = FastAPI()
+templates = Jinja2Templates(directory="backend/templates")
 
 origins = ["http://127.0.0.1:5500"]
 app.add_middleware(
@@ -31,9 +34,13 @@ model.Base.metadata.create_all(bind=engine)
 
 db_dependency = Annotated[SessionLocal, Depends(connect_db)]
 
-@app.get('/')
-def home():
-    return {"message": "Welcome to Brajesh Kumar's Portfolio!"}
+# @app.get('/')
+# def home():
+#     return {"message": "Welcome to Brajesh Kumar's Portfolio!"}
+
+@app.get("/")
+def home(request: Request):
+    return templates.TemplateResponse("home.html", {"request": request})
 
 @app.post('/contact')
 def contact(contact: schema.ContactForm, db: db_dependency): # type: ignore
