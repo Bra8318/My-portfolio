@@ -1,5 +1,5 @@
 backend/db.env
-backend/uploads
-backend/myenv
+backend/uploads/
+backend/myenv/
 frontend/Brajesh_CV.pdf
 frontend/profile.jpg

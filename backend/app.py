@@ -1,11 +1,10 @@
 from fastapi import Depends, FastAPI, Request, Form, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-import model
+from backend import model,schema,database
 from database import connect_db, Base, engine, SessionLocal
 from typing import Annotated, Optional
 from schema import ContactForm
-import schema
 import os
 import shutil
 import uuid
