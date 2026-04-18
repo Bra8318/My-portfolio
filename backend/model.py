@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String,Integer,Text, DateTime
-from database import Base
+from backend.database import Base
 from datetime import datetime
 
 class Contact(Base):
