@@ -13,7 +13,7 @@ import uuid
 
 app = FastAPI()
 
-origins = ["http://127.0.0.1:5500"]
+origins = ["http://127.0.0.1:5500","https://brajesh-kumar.vercel.app"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
