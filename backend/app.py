@@ -26,8 +26,8 @@ app.add_middleware(
 )
 
 cloudinary.config(
-    cloud_name = setting.cloud_name
-    api_key = setting.api_key
+    cloud_name = setting.cloud_name,
+    api_key = setting.api_key,
     api_secret = setting.api_secret
 )
 # UPLOAD_DIR = "uploads"
