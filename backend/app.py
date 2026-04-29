@@ -112,7 +112,9 @@ def upload_cv(db: db_dependency, cv: UploadFile = File(...)): # type: ignore
         folder = "portfolio/cv",
         use_filename=True,
         unique_filename=False,
-        format="pdf" )
+        format="pdf",
+        filename_override = cv.filename,
+        access_mode = "public")
 
         file_url = result["secure_url"]
     
