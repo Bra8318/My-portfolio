@@ -355,7 +355,7 @@
                 
                 if (data.cv) {
                     // Download from backend
-                    window.location.href = `${API_URL}${data.cv}`;
+                    window.location.href = `${data.cv}`;
                 } else {
                     // Fallback to static PDF
                     window.location.href = 'Brajesh_CV.pdf';
@@ -374,7 +374,7 @@
                 const data = await response.json();
                 
                 if (data.photo) {
-                    document.getElementById('profilePhotoImg').src = `${API_URL}${data.photo}`;
+                    document.getElementById('profilePhotoImg').src = `${data.photo}`;
                 }
             } catch (error) {
                 console.error('Error loading profile photo:', error);
