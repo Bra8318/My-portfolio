@@ -107,11 +107,16 @@ def upload_cv(db: db_dependency, cv: UploadFile = File(...)): # type: ignore
         return {"status": "error", "message": "Only PDF, DOC, DOCX files are allowed"}
     
     try:
-        result = cloudinary.uploader.upload(cv.file,
-        resource_type = "raw",
-        folder = "portfolio/cv",
-        public_id = cv.filename.rsplit(".", 1)[0],
-        overwrite=True)
+        name, ext = os.path.splitext(cv.filename)
+        safe_name = name.replace(" ", "_")
+
+        result = cloudinary.uploader.upload(
+            cv.file,
+            resource_type="raw",
+            folder="portfolio/cv",
+            public_id=f"{safe_name}{ext}", 
+            overwrite=True
+            )
 
 
         file_url = result["secure_url"]
