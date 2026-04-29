@@ -76,7 +76,7 @@ def upload_photo(db: db_dependency, photo: UploadFile = File(...)): # type: igno
         return {"status": "error", "message": "Only image files are allowed"}
     
     try:
-        cloudinary.uploader.upload(ptoto.file,
+        result = cloudinary.uploader.upload(ptoto.file,
         folder = "portfolio/photos")
        
         image_url = result["secure_url"]
@@ -107,7 +107,7 @@ def upload_cv(db: db_dependency, cv: UploadFile = File(...)): # type: ignore
         return {"status": "error", "message": "Only PDF, DOC, DOCX files are allowed"}
     
     try:
-        cloudinary.uploader.upload(cv.file,
+        result = cloudinary.uploader.upload(cv.file,
         resource_type = "raw",
         folder = "portfolio/cv")
 
