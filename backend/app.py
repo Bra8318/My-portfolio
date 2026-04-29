@@ -9,6 +9,9 @@ import schema
 import os
 import shutil
 import uuid
+import cloudinary
+import cloudinary.uploader
+from config import setting
 
 
 app = FastAPI()
@@ -22,11 +25,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-UPLOAD_DIR = "uploads"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
+cloudinary.config(
+    cloud_name = setting.cloud_name
+    api_key = setting.api_key
+    api_secret = setting.api_secret
+)
+# UPLOAD_DIR = "uploads"
+# os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-# Serve uploaded files
-app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
+# # Serve uploaded files
+# app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 model.Base.metadata.create_all(bind=engine)
 
@@ -67,28 +75,30 @@ def upload_photo(db: db_dependency, photo: UploadFile = File(...)): # type: igno
     if not photo.content_type.startswith('image/'):
         return {"status": "error", "message": "Only image files are allowed"}
     
-    file_ext = os.path.splitext(photo.filename)[1]
-    unique_filename = f"photo_{uuid.uuid4().hex}{file_ext}"
-    file_path = os.path.join(UPLOAD_DIR, unique_filename)
+    try:
+       cloudinary.uploader.upload(ptoto.file,
+        folder = "portfolio/photos")
+       
+        image_url = result["secure_url"]
+       
     
-    with open(file_path, "wb") as f:
-        shutil.copyfileobj(photo.file, f)
+        record = db.query(model.data).first()
+        if record is None:
+            record = model.data(photo=image_url, cv=None)
+            db.add(record)
+        else:
+            record.photo = image_url
     
-    record = db.query(model.data).first()
-    if record is None:
-        record = model.data(photo=f"/uploads/{unique_filename}", cv=None)
-        db.add(record)
-    else:
-        record.photo = f"/uploads/{unique_filename}"
+        db.commit()
+        db.refresh(record)
     
-    db.commit()
-    db.refresh(record)
-    
-    return {
-        "status": "success",
-        "message": "Photo uploaded successfully",
-        "photo": record.photo
-    }
+        return {
+            "status": "success",
+            "message": "Photo uploaded successfully",
+            "photo": image_url
+        }
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
 
 @app.post('/upload_cv')
 def upload_cv(db: db_dependency, cv: UploadFile = File(...)): # type: ignore
@@ -98,29 +108,31 @@ def upload_cv(db: db_dependency, cv: UploadFile = File(...)): # type: ignore
     if cv.content_type not in valid_types:
         return {"status": "error", "message": "Only PDF, DOC, DOCX files are allowed"}
     
-    file_ext = os.path.splitext(cv.filename)[1]
-    unique_filename = f"cv_{uuid.uuid4().hex}{file_ext}"
-    file_path = os.path.join(UPLOAD_DIR, unique_filename)
-    
-    with open(file_path, "wb") as f:
-        shutil.copyfileobj(cv.file, f)
-    
-    record = db.query(model.data).first()
-    if record is None:
-        record = model.data(photo=None, cv=f"/uploads/{unique_filename}")
-        db.add(record)
-    else:
-        record.cv = f"/uploads/{unique_filename}"
-    
-    db.commit()
-    db.refresh(record)
-    
-    return {
-        "status": "success",
-        "message": "CV uploaded successfully",
-        "cv": record.cv
-    }
+    try:
+        cloudinary.uploader.opload(cv.file,
+        resource_type = "raw",
+        folder = "portfolio/cv")
 
+        file_url = result["secure_url"]
+    
+    
+        record = db.query(model.data).first()
+        if record is None:
+            record = model.data(photo=None, cv=file_url)
+            db.add(record)
+        else:
+            record.cv = file_url
+    
+        db.commit()
+        db.refresh(record)
+    
+        return {
+            "status": "success",
+            "message": "CV uploaded successfully",
+            "cv": file_url
+        }
+      except Exception as e:
+        return {"status": "error", "message": str(e)}
 @app.get('/get_files')
 def get_files(db: db_dependency): # type: ignore
     record = db.query(model.data).first()
