@@ -107,7 +107,7 @@ def upload_cv(db: db_dependency, cv: UploadFile = File(...)): # type: ignore
         return {"status": "error", "message": "Only PDF, DOC, DOCX files are allowed"}
     
     try:
-        cloudinary.uploader.opload(cv.file,
+        cloudinary.uploader.upload(cv.file,
         resource_type = "raw",
         folder = "portfolio/cv")
 
