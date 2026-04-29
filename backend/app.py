@@ -109,7 +109,10 @@ def upload_cv(db: db_dependency, cv: UploadFile = File(...)): # type: ignore
     try:
         result = cloudinary.uploader.upload(cv.file,
         resource_type = "raw",
-        folder = "portfolio/cv")
+        folder = "portfolio/cv",
+        use_filename=True,
+        unique_filename=False,
+        format="pdf" )
 
         file_url = result["secure_url"]
     
