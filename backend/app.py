@@ -76,12 +76,10 @@ def upload_photo(db: db_dependency, photo: UploadFile = File(...)): # type: igno
         return {"status": "error", "message": "Only image files are allowed"}
     
     try:
-       cloudinary.uploader.upload(ptoto.file,
+        cloudinary.uploader.upload(ptoto.file,
         folder = "portfolio/photos")
        
         image_url = result["secure_url"]
-       
-    
         record = db.query(model.data).first()
         if record is None:
             record = model.data(photo=image_url, cv=None)
