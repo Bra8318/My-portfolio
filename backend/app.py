@@ -110,9 +110,9 @@ def upload_cv(db: db_dependency, cv: UploadFile = File(...)): # type: ignore
         result = cloudinary.uploader.upload(cv.file,
         resource_type = "raw",
         folder = "portfolio/cv",
-        use_filename=True,
-        unique_filename=False,
-        type = "upload")
+        public_id = cv.filename.rsplit(".", 1)[0],
+        overwrite=True)
+
 
         file_url = result["secure_url"]
     
