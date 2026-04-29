@@ -115,7 +115,8 @@ def upload_cv(db: db_dependency, cv: UploadFile = File(...)): # type: ignore
             resource_type="raw",
             folder="portfolio/cv",
             public_id=f"{safe_name}{ext}", 
-            overwrite=True
+            overwrite=True,
+            type = "upload"
             )
 
 
