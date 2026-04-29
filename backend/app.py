@@ -114,7 +114,7 @@ def upload_cv(db: db_dependency, cv: UploadFile = File(...)): # type: ignore
         unique_filename=False,
         format="pdf",
         filename_override = cv.filename,
-        access_mode = "public")
+        type = "upload")
 
         file_url = result["secure_url"]
     
