@@ -129,7 +129,7 @@ def upload_cv(db: db_dependency, cv: UploadFile = File(...)): # type: ignore
             "message": "CV uploaded successfully",
             "cv": file_url
         }
-      except Exception as e:
+    except Exception as e:
         return {"status": "error", "message": str(e)}
 @app.get('/get_files')
 def get_files(db: db_dependency): # type: ignore
