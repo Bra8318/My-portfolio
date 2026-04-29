@@ -76,7 +76,7 @@ def upload_photo(db: db_dependency, photo: UploadFile = File(...)): # type: igno
         return {"status": "error", "message": "Only image files are allowed"}
     
     try:
-        result = cloudinary.uploader.upload(ptoto.file,
+        result = cloudinary.uploader.upload(photo.file,
         folder = "portfolio/photos")
        
         image_url = result["secure_url"]
