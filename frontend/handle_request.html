@@ -337,7 +337,10 @@
                     alert(result.message || 'Photo upload failed');
                     return;
                 }
-
+                 const imgElement = document.getElementById('profilePhoto');
+                 if (imgElement && result.photo) {
+                    imgElement.src = result.photo;
+                    }
                 alert('Photo uploaded successfully!');
                 document.getElementById('photoForm').reset();
             } catch (error) {
